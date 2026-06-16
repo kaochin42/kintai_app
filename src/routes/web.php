@@ -13,7 +13,7 @@ use App\Http\Controllers\Admin\StampCorrectionRequestController as AdminStampCor
 // 一般ユーザー（認証不要）
 Route::get('/register', [RegisterController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'store']);
-Route::get('/login', [LoginController::class, 'index']);
+Route::get('/login', [LoginController::class, 'index'])->name('register');
 Route::post('/login', [LoginController::class, 'store'])->name('login');
 
 // 一般ユーザー（認証あり）
