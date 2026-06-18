@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use App\Models\User;
 
-#[Fillable(['date', 'clock_in', 'clock_out', 'comment'])]
+#[Fillable(['user_id', 'date', 'clock_in', 'clock_out', 'comment'])]
 class AttendanceRecord extends Model
 {
     public function stampCorrectionRequests()

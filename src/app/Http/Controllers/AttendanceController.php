@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendanceRecord;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
@@ -24,6 +26,43 @@ class AttendanceController extends Controller
         ]);
     }
 
+    public function store(Request $request)
+    {
+        $action = $request->input('action');
+
+        if ($action === 'clock_in') {
+            AttendanceRecord::create([
+                'user_id' => Auth::id(),
+                'date' => today(),
+                'clock_in' => now(),
+            ]);
+        } elseif ($action === 'break_in') {
+            $attendanceRecord = AttendanceRecord::where('user_id', Auth::id())
+                ->where('date', today())
+                ->first();
+
+            $attendanceRecord->attendanceBreaks()->create([
+                'break_in' => now(),
+            ]);
+        } elseif ($action === 'break_out') {
+            $attendanceRecord = AttendanceRecord::where('user_id', Auth::id())
+                ->where('date', today())
+                ->first();
+
+            $latestBreak = $attendanceRecord->attendanceBreaks()->latest()->first();
+
+            $latestBreak->update(['break_out' => now()]);
+        } elseif ($action === 'clock_out') {
+            $attendanceRecord = AttendanceRecord::where('user_id', Auth::id())
+                ->where('date', today())
+                ->first();
+
+            $attendanceRecord->update(['clock_out' => now()]);
+        }
+
+        return redirect('/attendance');
+    }
+
     private function getStatus($attendanceRecord)
     {
         if (!$attendanceRecord) {
@@ -41,5 +80,35 @@ class AttendanceController extends Controller
         }
 
         return '出勤中';
+    }
+
+    public function list(Request $request)
+    {
+        $month = $request->input('month', now()->format('Y-m'));
+        $currentMonth = Carbon::createFromFormat('Y-m', $month);
+
+        $attendanceRecords = AttendanceRecord::where('user_id', Auth::id())
+            ->where('date', 'like', $month . '%')
+            ->get()
+            ->keyBy(function ($record) {
+                return $record->date->format('Y-m-d');
+            });
+
+        $daysInMonth = $currentMonth->daysInMonth;
+        $dates = [];
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $dates[] = $currentMonth->copy()->day($day)->format('Y-m-d');
+        }
+
+        $prevMonth = $currentMonth->copy()->subMonth()->format('Y-m');
+        $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
+
+        return view('attendance.list', [
+            'dates' => $dates,
+            'attendanceRecords' => $attendanceRecords,
+            'currentMonth' => $currentMonth,
+            'prevMonth' => $prevMonth,
+            'nextMonth' => $nextMonth,
+        ]);
     }
 }

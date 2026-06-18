@@ -31,7 +31,7 @@
     @if($status === '勤務外')
     <form action="/attendance" method="post">
         @csrf
-        <button class="btn btn--big">出勤</button>
+        <button name="action" value="clock_in" class="btn btn--big">出勤</button>
     </form>
     @elseif($status === '出勤中')
     <form action="/attendance" method="post">
