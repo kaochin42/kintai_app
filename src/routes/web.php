@@ -27,10 +27,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'index']);
 });
 
-// 管理者（認証あり）
-Route::middleware('auth')->prefix('admin')->group(function () {
+
+//管理者（認証なし）
+Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'index']);
     Route::post('/login', [AdminLoginController::class, 'store'])->name('admin.login');
+});
+
+// 管理者（認証あり）
+Route::middleware('auth')->prefix('admin')->group(function () {
     Route::post('/logout', [AdminLoginController::class, 'destroy']);
     Route::get('/attendance/list', [AdminAttendanceController::class, 'index']);
     Route::get('/attendance/{id}', [AdminAttendanceController::class, 'show']);
