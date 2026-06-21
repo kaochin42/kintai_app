@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\AttendanceRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\CalculatesAttendance;
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
+    use CalculatesAttendance;
+
     public function index()
     {
         $today = today();
@@ -89,9 +92,15 @@ class AttendanceController extends Controller
 
         $attendanceRecords = AttendanceRecord::where('user_id', Auth::id())
             ->where('date', 'like', $month . '%')
+            ->with('attendanceBreaks')
             ->get()
             ->keyBy(function ($record) {
                 return $record->date->format('Y-m-d');
+            })
+            ->map(function ($record) {
+                $record->break_time = $this->formatMinutesToTime($this->calculateBreakMinutes($record));
+                $record->work_time = $this->formatMinutesToTime($this->calculateWorkMinutes($record));
+                return $record;
             });
 
         $daysInMonth = $currentMonth->daysInMonth;

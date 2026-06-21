@@ -15,7 +15,11 @@ class LoginController extends Controller
 
     public function store(LoginRequest $request)
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password,
+            'admin_status' => false,
+        ])) {
             return back()->withErrors([
                 'password' => 'ログイン情報が登録されていません。',
             ]);

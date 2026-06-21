@@ -9,6 +9,11 @@ use App\Models\User;
 #[Fillable(['user_id', 'date', 'clock_in', 'clock_out', 'comment'])]
 class AttendanceRecord extends Model
 {
+    protected function casts(): array
+    {
+        return ['date' => 'date'];
+    }
+
     public function stampCorrectionRequests()
     {
         return $this->hasMany(StampCorrectionRequest::class);

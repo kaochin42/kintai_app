@@ -35,8 +35,8 @@
                 <td>{{ \Carbon\Carbon::parse($date)->isoFormat('MM/DD(ddd)') }}</td>
                 <td>{{ $attendanceRecords[$date]?->clock_in ?? '' }}</td>
                 <td>{{ $attendanceRecords[$date]?->clock_out ?? '' }}</td>
-                <td></td>
-                <td></td>
+                <td>{{ $attendanceRecords[$date]?->break_time ?? '' }}</td>
+                <td>{{ $attendanceRecords[$date]?->work_time ?? '' }}</td>
                 <td>
                     <a href="/attendance/detail/{{ $attendanceRecords[$date]?->id ?? '' }}">詳細</a>
                 </td>
