@@ -38,7 +38,9 @@
                 <td>{{ $attendanceRecords[$date]?->break_time ?? '' }}</td>
                 <td>{{ $attendanceRecords[$date]?->work_time ?? '' }}</td>
                 <td>
-                    <a href="/attendance/detail/{{ $attendanceRecords[$date]?->id ?? '' }}">詳細</a>
+                    @if($attendanceRecords[$date])
+                    <a href="/attendance/detail/{{ $attendanceRecords[$date]->id }}">詳細</a>
+                    @endif
                 </td>
             </tr>
             @endforeach

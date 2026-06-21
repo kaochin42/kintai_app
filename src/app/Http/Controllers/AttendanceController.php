@@ -120,4 +120,16 @@ class AttendanceController extends Controller
             'nextMonth' => $nextMonth,
         ]);
     }
+
+    public function show($id)
+    {
+        $attendanceRecord = AttendanceRecord::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->with('attendanceBreaks')
+            ->firstOrFail();
+
+        return view('attendance.detail', [
+            'attendanceRecord' => $attendanceRecord,
+        ]);
+    }
 }
