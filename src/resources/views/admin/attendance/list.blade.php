@@ -33,8 +33,8 @@
             @foreach($attendanceRecords as $record)
             <tr>
                 <td>{{ $record->user->name }}</td>
-                <td>{{ $record->clock_in }}</td>
-                <td>{{ $record->clock_out }}</td>
+                <td>{{ $record->clock_in->format('H:i') }}</td>
+                <td>{{ $record->clock_out?->format('H:i') }}</td>
                 <td>{{ $record->break_time }}</td>
                 <td>{{ $record->work_time }}</td>
                 <td>
