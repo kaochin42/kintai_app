@@ -11,7 +11,11 @@ class AttendanceRecord extends Model
 {
     protected function casts(): array
     {
-        return ['date' => 'date'];
+        return [
+            'date' => 'date',
+            'clock_in' => 'datetime:H:i',
+            'clock_out' => 'datetime:H:i',
+        ];
     }
 
     public function stampCorrectionRequests()

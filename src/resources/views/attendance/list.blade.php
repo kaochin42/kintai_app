@@ -32,14 +32,14 @@
         <tbody>
             @foreach($dates as $date)
             <tr>
-                <td>{{ \Carbon\Carbon::parse($date)->isoFormat('MM/DD(ddd)') }}</td>
-                <td>{{ $attendanceRecords[$date]?->clock_in ?? '' }}</td>
-                <td>{{ $attendanceRecords[$date]?->clock_out ?? '' }}</td>
-                <td>{{ $attendanceRecords[$date]?->break_time ?? '' }}</td>
-                <td>{{ $attendanceRecords[$date]?->work_time ?? '' }}</td>
+                <td>{{ \Carbon\Carbon::parse($date)->locale('ja')->isoFormat('MM/DD(ddd)') }}</td>
+                <td>{{ $attendanceRecords->get($date)?->clock_in?->format('H:i') ?? '' }}</td>
+                <td>{{ $attendanceRecords->get($date)?->clock_out?->format('H:i') ?? '' }}</td>
+                <td>{{ $attendanceRecords->get($date)?->break_time ?? '' }}</td>
+                <td>{{ $attendanceRecords->get($date)?->work_time ?? '' }}</td>
                 <td>
-                    @if($attendanceRecords[$date])
-                    <a href="/attendance/detail/{{ $attendanceRecords[$date]->id }}">詳細</a>
+                    @if($attendanceRecords->get($date))
+                    <a href="/attendance/detail/{{ $attendanceRecords->get($date)->id }}">詳細</a>
                     @endif
                 </td>
             </tr>
