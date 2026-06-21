@@ -9,6 +9,7 @@ use App\Traits\CalculatesAttendance;
 use Carbon\Carbon;
 use App\Models\StampCorrectionRequest;
 use App\Models\CorrectionBreak;
+use App\Http\Requests\AttendanceUpdateRequest;
 
 class AttendanceController extends Controller
 {
@@ -135,7 +136,7 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(AttendanceUpdateRequest $request, $id)
     {
         $attendanceRecord = AttendanceRecord::where('id', $id)
             ->where('user_id', Auth::id())
