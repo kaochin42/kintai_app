@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\CalculatesAttendance;
 use Carbon\Carbon;
+use App\Models\StampCorrectionRequest;
+use App\Models\CorrectionBreak;
 
 class AttendanceController extends Controller
 {
@@ -131,5 +133,34 @@ class AttendanceController extends Controller
         return view('attendance.detail', [
             'attendanceRecord' => $attendanceRecord,
         ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $attendanceRecord = AttendanceRecord::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $stampCorrectionRequest = StampCorrectionRequest::create([
+            'attendance_record_id' => $attendanceRecord->id,
+            'user_id' => Auth::id(),
+            'new_clock_in' => $request->clock_in,
+            'new_clock_out' => $request->clock_out,
+            'new_comment' => $request->comment,
+        ]);
+
+        foreach ($request->breaks as $break) {
+            if (!$break['break_in'] && !$break['break_out']) {
+                continue;
+            }
+
+            CorrectionBreak::create([
+                'stamp_correction_request_id' => $stampCorrectionRequest->id,
+                'new_break_in' => $break['break_in'],
+                'new_break_out' => $break['break_out'],
+            ]);
+        }
+
+        return redirect("/attendance/detail/{$id}");
     }
 }
