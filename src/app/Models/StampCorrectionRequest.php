@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use App\Models\User;
 
-#[Fillable(['new_clock_in', 'new_clock_out', 'new_comment'])]
+#[Fillable(['attendance_record_id', 'user_id', 'new_clock_in', 'new_clock_out', 'new_comment'])]
 class StampCorrectionRequest extends Model
 {
     public function correctionBreaks()

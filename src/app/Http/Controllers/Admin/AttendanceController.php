@@ -7,6 +7,7 @@ use App\Models\AttendanceRecord;
 use Carbon\Carbon;
 use App\Traits\CalculatesAttendance;
 use Illuminate\Http\Request;
+use App\Http\Requests\AttendanceUpdateRequest;
 
 class AttendanceController extends Controller
 {
@@ -42,6 +43,44 @@ class AttendanceController extends Controller
             'prevDate' => $prevDate,
             'nextDate' => $nextDate,
         ]);
+    }
+
+    public function show($id)
+    {
+        $attendanceRecord = AttendanceRecord::where('id', $id)
+            ->with('attendanceBreaks')
+            ->firstOrFail();
+
+        return view('admin.attendance.detail', [
+            'attendanceRecord' => $attendanceRecord,
+        ]);
+    }
+
+    public function update(AttendanceUpdateRequest $request, $id)
+    {
+        $attendanceRecord = AttendanceRecord::where('id', $id)
+            ->firstOrFail();
+
+        $attendanceRecord->update([
+            'clock_in' => $request->clock_in,
+            'clock_out' => $request->clock_out,
+            'comment' => $request->comment,
+        ]);
+
+        $attendanceRecord->attendanceBreaks()->delete();
+
+        foreach ($request->breaks as $break) {
+            if (!$break['break_in'] && !$break['break_out']) {
+                continue;
+            }
+
+            $attendanceRecord->attendanceBreaks()->create([
+                'break_in' => $break['break_in'],
+                'break_out' => $break['break_out'],
+            ]);
+        }
+
+        return redirect("/admin/attendance/{$id}");
     }
 
 }

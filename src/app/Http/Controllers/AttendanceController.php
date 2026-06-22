@@ -162,6 +162,6 @@ class AttendanceController extends Controller
             ]);
         }
 
-        return redirect("/attendance/detail/{$id}");
+        return redirect('/stamp_correction_request/list');
     }
 }
