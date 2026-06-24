@@ -8,7 +8,6 @@ use App\Http\Controllers\StampCorrectionRequestController;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 use App\Http\Controllers\Admin\StaffController;
-use App\Http\Controllers\Admin\StampCorrectionRequestController as AdminStampCorrectionRequestController;
 
 // 一般ユーザー（認証不要）
 Route::get('/register', [RegisterController::class, 'index']);
@@ -25,6 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/attendance/detail/{id}', [AttendanceController::class, 'show']);
     Route::put('/attendance/detail/{id}', [AttendanceController::class, 'update']);
     Route::get('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'index']);
+    Route::get('/stamp_correction_request/approve/{id}', [StampCorrectionRequestController::class, 'show']);
+    Route::post('/stamp_correction_request/approve/{id}', [StampCorrectionRequestController::class, 'update']);
 });
 
 
@@ -42,7 +43,4 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::put('/attendance/{id}', [AdminAttendanceController::class, 'update']);
     Route::get('/staff/list', [StaffController::class, 'index']);
     Route::get('/attendance/staff/{id}', [StaffController::class, 'show']);
-    Route::get('/stamp_correction_request/list', [AdminStampCorrectionRequestController::class, 'index']);
-    Route::get('/stamp_correction_request/approve/{id}', [AdminStampCorrectionRequestController::class, 'show']);
-    Route::post('/stamp_correction_request/approve/{id}', [AdminStampCorrectionRequestController::class, 'update']);
 });

@@ -12,7 +12,9 @@
 <div class="attendance-detail center">
     <h1 class="page__title-bar">勤怠詳細</h1>
 
-    <form action="/attendance/detail/{{ $attendanceRecord->id }}" method="post" class="detail-table">
+    <form action="{{ Auth::user()->admin_status ? '/admin/attendance/'.$attendanceRecord->id : '/attendance/detail/'.$attendanceRecord->id }}"
+        method="post"
+        class="detail-table">
         @csrf
         @method('PUT')
 

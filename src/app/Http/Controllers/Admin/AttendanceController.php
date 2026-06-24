@@ -51,7 +51,7 @@ class AttendanceController extends Controller
             ->with('attendanceBreaks')
             ->firstOrFail();
 
-        return view('admin.attendance.detail', [
+        return view('attendance.detail', [
             'attendanceRecord' => $attendanceRecord,
         ]);
     }
