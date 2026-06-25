@@ -12,4 +12,12 @@ class CorrectionBreak extends Model
     {
         return $this->belongsTo(StampCorrectionRequest::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'new_break_in' => 'datetime',
+            'new_break_out' => 'datetime',
+        ];
+    }
 }
