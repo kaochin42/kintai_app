@@ -41,6 +41,11 @@ class StampCorrectionRequestController extends Controller
             ->with(['user', 'attendanceRecord', 'correctionBreaks'])
             ->firstOrFail();
 
+        // 一般ユーザーの場合は勤怠詳細画面にリダイレクト
+        if (!Auth::user()->admin_status) {
+            return redirect("/attendance/detail/{$stampCorrectionRequest->attendance_record_id}");
+        }
+
         return view('stamp_correction_request.approve', [
             'stampCorrectionRequest' => $stampCorrectionRequest,
         ]);

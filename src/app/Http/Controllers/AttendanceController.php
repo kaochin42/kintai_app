@@ -125,16 +125,20 @@ class AttendanceController extends Controller
     }
 
     public function show($id)
-    {
-        $attendanceRecord = AttendanceRecord::where('id', $id)
-            ->where('user_id', Auth::id())
-            ->with('attendanceBreaks')
-            ->firstOrFail();
+{
+    $attendanceRecord = AttendanceRecord::where('id', $id)
+        ->with('attendanceBreaks')
+        ->firstOrFail();
 
-        return view('attendance.detail', [
-            'attendanceRecord' => $attendanceRecord,
-        ]);
-    }
+    $hasPendingRequest = StampCorrectionRequest::where('attendance_record_id', $attendanceRecord->id)
+        ->where('is_approved', false)
+        ->exists();
+
+    return view('attendance.detail', [
+        'attendanceRecord' => $attendanceRecord,
+        'hasPendingRequest' => $hasPendingRequest,
+    ]);
+}
 
     public function update(AttendanceUpdateRequest $request, $id)
     {

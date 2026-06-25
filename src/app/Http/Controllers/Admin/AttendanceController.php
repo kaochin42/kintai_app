@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Traits\CalculatesAttendance;
 use Illuminate\Http\Request;
 use App\Http\Requests\AttendanceUpdateRequest;
+use App\Models\StampCorrectionRequest;
 
 class AttendanceController extends Controller
 {
@@ -51,8 +52,13 @@ class AttendanceController extends Controller
             ->with('attendanceBreaks')
             ->firstOrFail();
 
+        $hasPendingRequest = StampCorrectionRequest::where('attendance_record_id', $attendanceRecord->id)
+            ->where('is_approved', false)
+            ->exists();
+
         return view('attendance.detail', [
             'attendanceRecord' => $attendanceRecord,
+            'hasPendingRequest' => $hasPendingRequest,
         ]);
     }
 
