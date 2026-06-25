@@ -18,7 +18,7 @@
             <li><a href="/stamp_correction_request/list">申請</a></li>
             @endif
             <li>
-                <form action="/logout" method="post">
+                <form action="{{ Auth::user()->admin_status ? '/admin/logout' : '/logout' }}" method="post">
                     @csrf
                     <button class="header__logout">ログアウト</button>
                 </form>
