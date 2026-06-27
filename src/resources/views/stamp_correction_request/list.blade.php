@@ -3,7 +3,7 @@
 @section('title','申請一覧')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('/css/stamp_correction_request.css') }}">
+<link rel="stylesheet" href="{{ asset('/css/attendance.css') }}">
 @endsection
 
 @section('content')
@@ -13,8 +13,10 @@
     <h1 class="page__title-bar">申請一覧</h1>
 
     <div class="tab">
-        <a href="?tab=pending" class="tab__item">承認待ち</a>
-        <a href="?tab=approved" class="tab__item">承認済み</a>
+        <a href="?tab=pending"
+            class="tab__item {{ request('tab') !== 'approved' ? 'active' : '' }}">承認待ち</a>
+        <a href="?tab=approved"
+            class="tab__item {{ request('tab') === 'approved' ? 'active' : '' }}">承認済み</a>
     </div>
 
     <table class="request-table">

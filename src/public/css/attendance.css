@@ -1,0 +1,290 @@
+/* 打刻画面 */
+.attendance {
+    text-align: center;
+    padding-top: 80px;
+}
+
+.status-badge {
+    display: inline-block;
+    background-color: #ccc;
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.date {
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.time {
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.thanks {
+    font-size: 18px;
+    margin-top: 40px;
+}
+
+/* 背景色 */
+body {
+    background-color: #F0EFF2;
+}
+
+/* 勤怠画面を縦中央に */
+.attendance {
+    text-align: center;
+    min-height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ボタンの幅を調整 */
+.attendance .btn--big {
+    width: 200px;
+    margin-top: 20px;
+}
+
+/* 出勤中のボタンを横並びに */
+.attendance form {
+    display: flex;
+    gap: 20px;
+}
+
+/* 休憩ボタン（白） */
+.btn--outline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 2px solid #fff;
+    border-radius: 20px;
+    color: #000;
+    font-weight: bold;
+    width: 200px;
+    height: 45px;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.attendance .btn--big {
+    width: 221px;
+    height: 77px;
+    margin-top: 20px;
+    border-radius: 20px;
+}
+
+.btn--outline {
+    width: 221px;
+    height: 77px;
+    /* 他のスタイルはそのまま */
+}
+
+/* 勤怠一覧 */
+/* 一覧系共通 */
+.page__title-bar {
+    font-size: 24px;
+    font-weight: bold;
+    border-left: 4px solid #000;
+    padding-left: 12px;
+    margin-bottom: 30px;
+}
+
+/* 月/日ナビゲーション */
+.month-nav,
+.date-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+}
+
+.month-nav a,
+.date-nav a {
+    color: #000;
+    text-decoration: none;
+}
+
+.month-nav a:hover,
+.date-nav a:hover {
+    font-weight: bold;
+}
+
+/* テーブル共通 */
+.attendance-table,
+.staff-table,
+.request-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.attendance-table th,
+.staff-table th,
+.request-table th {
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 14px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.attendance-table td,
+.staff-table td,
+.request-table td {
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.attendance-table tr:last-child td,
+.staff-table tr:last-child td,
+.request-table tr:last-child td {
+    border-bottom: none;
+}
+
+.attendance-table a,
+.staff-table a,
+.request-table a {
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+}
+
+/* 一覧画面のcenterを広げる */
+.attendance-list,
+.staff-list,
+.request-list {
+    width: 900px;
+    margin: 0 auto;
+    padding: 50px 0;
+}
+
+/* 申請一覧タブ */
+.tab {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.tab__item {
+    padding: 10px 20px;
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.tab__item:hover {
+    font-weight: bold;
+}
+
+.tab__item.active {
+    border-bottom: 2px solid #000;
+    font-weight: bold;
+}
+
+/* 勤怠詳細 */
+.attendance-detail {
+    padding: 50px 0;
+}
+
+.detail-table {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    width: 160px;
+    font-size: 14px;
+    color: #666;
+    flex-shrink: 0;
+}
+
+.detail-value {
+    font-size: 14px;
+}
+
+.detail-row input[type="time"],
+.detail-row input[type="text"] {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 14px;
+    height: 36px;
+}
+
+.detail-row input[type="time"] {
+    width: 120px;
+}
+
+.detail-row input[type="text"] {
+    width: 300px;
+}
+
+/* 承認待ちメッセージ */
+.pending-message {
+    color: #ff333f;
+    text-align: right;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+/* 詳細画面のformの余白をリセット */
+.detail-table.attendance-detail form,
+form.detail-table {
+    margin-bottom: 0;
+}
+
+/* 修正ボタンを右寄せ・幅を調整 */
+.detail-table~.btn--big,
+form.detail-table .btn--big {
+    width: 160px;
+    margin-top: 20px;
+    margin-left: auto;
+    font-size: 16px;
+}
+
+/* 時計アイコンを非表示 */
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+/* 未入力のtime inputを空欄に見せる */
+input[type="time"]:not([value])::-webkit-datetime-edit {
+    color: transparent;
+}
+
+input[type="time"][value=""]::-webkit-datetime-edit {
+    color: transparent;
+}
+
+/* ボタン単体で右寄せ */
+.detail-submit {
+    width: 160px;
+    margin-top: 20px;
+    margin-left: auto;
+    font-size: 16px;
+}

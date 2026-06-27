@@ -112,8 +112,8 @@
                 @enderror
             </div>
         </div>
-        <button class="btn btn--big">修正</button>
     </form>
+    <button class="btn btn--big detail-submit" form="attendance-form">修正</button>
     @endif
 </div>
 @endsection
