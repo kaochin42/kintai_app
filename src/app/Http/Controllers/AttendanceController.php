@@ -168,4 +168,94 @@ class AttendanceController extends Controller
 
         return redirect('/stamp_correction_request/list');
     }
+
+    public function report()
+    {
+        // 過去6ヶ月（当月含む）の期間を設定
+        $startMonth = now()->subMonths(5)->startOfMonth();
+        $endMonth = now()->endOfMonth();
+
+        // 期間内のレコードを取得
+        $attendanceRecords = AttendanceRecord::where('user_id', Auth::id())
+            ->whereBetween('date', [$startMonth, $endMonth])
+            ->with('attendanceBreaks')
+            ->get();
+
+        // 基本サマリー
+        $totalWorkMinutes = $attendanceRecords->sum(function ($record) {
+            return $this->calculateWorkMinutes($record);
+        });
+
+        $totalOvertimeMinutes = $attendanceRecords->sum(function ($record) {
+            $workMinutes = $this->calculateWorkMinutes($record);
+            return $workMinutes > 480 ? $workMinutes - 480 : 0;
+        });
+
+        $workedDays = $attendanceRecords->filter(function ($record) {
+            return $record->clock_in !== null;
+        })->count();
+
+        $averageWorkMinutes = $workedDays > 0
+            ? intdiv($totalWorkMinutes, $workedDays)
+            : 0;
+
+        // 当月の異常検知
+        $currentMonthRecords = $attendanceRecords->filter(function ($record) {
+            return $record->date->format('Y-m') === now()->format('Y-m');
+        });
+
+        $lateCount = $currentMonthRecords->filter(function ($record) {
+            if (!$record->clock_in) return false;
+            return $record->clock_in->gt(Carbon::parse('09:00'));
+        })->count();
+
+        $earlyLeaveCount = $currentMonthRecords->filter(function ($record) {
+            if (!$record->clock_out) return false;
+            return $record->clock_out->lt(Carbon::parse('18:00'));
+        })->count();
+
+        $longWorkCount = $currentMonthRecords->filter(function ($record) {
+            return $this->calculateWorkMinutes($record) > 600;
+        })->count();
+
+        // 月次推移
+        $monthlyRecords = $attendanceRecords->groupBy(function ($record) {
+            return $record->date->format('Y-m');
+        });
+
+        $monthlyData = [];
+        $currentMonth = now()->subMonths(5)->startOfMonth();
+
+        for ($i = 0; $i < 6; $i++) {
+            $monthKey = $currentMonth->format('Y-m');
+            $records = $monthlyRecords->get($monthKey, collect());
+
+            $workMinutes = $records->sum(function ($record) {
+                return $this->calculateWorkMinutes($record);
+            });
+
+            $overtimeMinutes = $records->sum(function ($record) {
+                $work = $this->calculateWorkMinutes($record);
+                return $work > 480 ? $work - 480 : 0;
+            });
+
+            $monthlyData[] = [
+                'month' => $monthKey,
+                'work_time' => $this->formatMinutesToTime($workMinutes, 'h'),
+                'overtime' => $this->formatMinutesToTime($overtimeMinutes, 'h'),
+            ];
+
+            $currentMonth->addMonth();
+        }
+
+        return view('attendance.report', [
+            'totalWorkTime' => $this->formatMinutesToTime($totalWorkMinutes, 'h'),
+            'totalOvertime' => $this->formatMinutesToTime($totalOvertimeMinutes, 'h'),
+            'averageWorkTime' => $this->formatMinutesToTime($averageWorkMinutes, 'h'),
+            'lateCount' => $lateCount,
+            'earlyLeaveCount' => $earlyLeaveCount,
+            'longWorkCount' => $longWorkCount,
+            'monthlyData' => $monthlyData,
+        ]);
+    }
 }

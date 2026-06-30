@@ -38,10 +38,14 @@ trait CalculatesAttendance
     /**
      * 「分」を「時:分」の文字列に変換する（例: 90分 → "1:30"）
      */
-    private function formatMinutesToTime($minutes)
+    private function formatMinutesToTime($minutes, $format = 'colon')
     {
         $hours = intdiv($minutes, 60);
         $remainingMinutes = $minutes % 60;
+
+        if ($format === 'h') {
+            return $hours . 'h ' . $remainingMinutes . 'm';
+        }
 
         return $hours . ':' . str_pad($remainingMinutes, 2, '0', STR_PAD_LEFT);
     }
