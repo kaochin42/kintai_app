@@ -16,6 +16,7 @@
             <li><a href="/attendance">勤怠</a></li>
             <li><a href="/attendance/list">勤怠一覧</a></li>
             <li><a href="/stamp_correction_request/list">申請</a></li>
+            <li><a href="/attendance/report">レポート</a></li>
             @endif
             <li>
                 <form action="{{ Auth::user()->admin_status ? '/admin/logout' : '/logout' }}" method="post">
