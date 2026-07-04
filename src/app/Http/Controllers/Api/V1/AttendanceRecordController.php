@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\AttendanceRecordResource;
 use App\Models\AttendanceRecord;
 use App\Http\Requests\Api\V1\StoreAttendanceRecordRequest;
+use App\Http\Requests\Api\V1\UpdateAttendanceRecordRequest;
 
 class AttendanceRecordController extends Controller
 {
@@ -51,5 +52,25 @@ class AttendanceRecordController extends Controller
         return (new AttendanceRecordResource($attendanceRecord))
             ->response()
             ->setStatusCode(201);
+    }
+
+    public function update(UpdateAttendanceRecordRequest $request, AttendanceRecord $attendanceRecord)
+    {
+        $this->authorize('update', $attendanceRecord);
+
+        $attendanceRecord->update($request->validated());
+
+        $attendanceRecord->load(['user', 'attendanceBreaks']);
+
+        return new AttendanceRecordResource($attendanceRecord);
+    }
+
+    public function destroy(AttendanceRecord $attendanceRecord)
+    {
+        $this->authorize('delete', $attendanceRecord);
+        
+        $attendanceRecord->delete();
+
+        return response()->noContent();
     }
 }
