@@ -50,7 +50,8 @@
     {{-- 通常の修正フォーム --}}
     <form action="{{ Auth::user()->admin_status ? '/admin/attendance/'.$attendanceRecord->id : '/attendance/detail/'.$attendanceRecord->id }}"
         method="post"
-        class="detail-table">
+        class="detail-table"
+        id="attendance-form">
         @csrf
         @method('PUT')
 
