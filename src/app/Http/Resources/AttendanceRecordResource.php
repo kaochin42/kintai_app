@@ -21,7 +21,12 @@ class AttendanceRecordResource extends JsonResource
             'user_id' => $this->user_id,
             'user_name' => $this->whenLoaded('user', fn() => $this->user->name),
             'date' => $this->date->format('Y-m-d'),
-            'clock_in' => $this->clock_in?->format('H:i:s'),        'clock_out' => $this->clock_out?->format('H:i:s'),        'total_time' => $this->calculateTotalTime(),        'total_break_time' => $this->calculateTotalBreakTime(),        'comment' => $this->comment,        'breaks' => AttendanceBreakResource::collection($this->whenLoaded('attendanceBreaks')),        'applications' => StampCorrectionRequestResource::collection($this->whenLoaded('stampCorrectionRequests')),];
+            'clock_in' => $this->clock_in?->format('H:i:s'),
+            'clock_out' => $this->clock_out?->format('H:i:s'),
+            'total_time' => $this->calculateTotalTime(),
+            'total_break_time' => $this->calculateTotalBreakTime(),
+            'comment' => $this->comment,
+            'breaks' => AttendanceBreakResource::collection($this->whenLoaded('attendanceBreaks')),        'applications' => StampCorrectionRequestResource::collection($this->whenLoaded('stampCorrectionRequests')),];
     }
     private function calculateTotalTime(): ?string
     {
