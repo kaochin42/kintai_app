@@ -13,9 +13,9 @@
     <h1 class="page__title-bar">{{ $user->name }}さんの勤怠一覧</h1>
 
     <div class="month-nav">
-        <a href="/admin/attendance/staff/{ $user->id }?month={{ $prevMonth }}">← 前月</a>
+        <a href="/admin/attendance/staff/{{ $user->id }}?month={{ $prevMonth }}">← 前月</a>
         <span>{{ $currentMonth->format('Y/m') }}</span>
-        <a href="/admin/attendance/staff/{ $user->id }?month={{ $nextMonth }}">翌月 →</a>
+        <a href="/admin/attendance/staff/{{ $user->id }}?month={{ $nextMonth }}">翌月 →</a>
     </div>
 
     <table class="attendance-table">

@@ -208,8 +208,14 @@ body {
 .detail-row {
     display: flex;
     align-items: center;
-    padding: 16px 20px;
+    padding: 30px 40px;
     border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row .time-value {
+    display: flex;
+    align-items: center;
+    gap: 50px;
 }
 
 .detail-row:last-child {
@@ -244,6 +250,10 @@ body {
     width: 300px;
 }
 
+.detail-row input.time-input {
+    width: 120px;
+}
+
 /* 承認待ちメッセージ */
 .pending-message {
     color: #ff333f;
@@ -270,15 +280,6 @@ form.detail-table .btn--big {
 /* 時計アイコンを非表示 */
 input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
-}
-
-/* 未入力のtime inputを空欄に見せる */
-input[type="time"]:not([value])::-webkit-datetime-edit {
-    color: transparent;
-}
-
-input[type="time"][value=""]::-webkit-datetime-edit {
-    color: transparent;
 }
 
 /* ボタン単体で右寄せ */
@@ -353,4 +354,25 @@ input[type="time"][value=""]::-webkit-datetime-edit {
 
 .report-table tr:last-child td {
     border-bottom: none;
+}
+
+.btn--big:disabled {
+    background-color: #696969;
+}
+
+input[type="time"],
+input[type="text"] {
+    color: #000;
+    background-color: #fff;
+}
+
+input[type="time"]:focus,
+input[type="text"]:focus {
+    color: #000;
+    background-color: #fff;
+}
+
+input:-webkit-autofill {
+    -webkit-text-fill-color: #000;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
 }

@@ -27,16 +27,20 @@
         </div>
         <div class="detail-row">
             <span class="detail-label">出勤・退勤</span>
-            <span>{{ $attendanceRecord->clock_in?->format('H:i') }}</span>
-            ～
-            <span>{{ $attendanceRecord->clock_out?->format('H:i') }}</span>
+            <div class="time-value">
+                <span>{{ $attendanceRecord->clock_in?->format('H:i') }}</span>
+                <span>～</span>
+                <span>{{ $attendanceRecord->clock_out?->format('H:i') }}</span>
+            </div>
         </div>
-        @foreach($attendanceRecord->attendanceBreaks as $break)
+        @foreach($pendingRequest->correctionBreaks as $break)
         <div class="detail-row">
             <span class="detail-label">休憩{{ $loop->iteration }}</span>
-            <span>{{ $break->break_in?->format('H:i') }}</span>
-            ～
-            <span>{{ $break->break_out?->format('H:i') }}</span>
+            <div class="time-value">
+                <span>{{ $break->new_break_in?->format('H:i') }}</span>
+                <span>～</span>
+                <span>{{ $break->new_break_out?->format('H:i') }}</span>
+            </div>
         </div>
         @endforeach
         <div class="detail-row">
@@ -48,7 +52,7 @@
 
     @else
     {{-- 通常の修正フォーム --}}
-    <form action="{{ Auth::user()->admin_status ? '/admin/attendance/'.$attendanceRecord->id : '/attendance/detail/'.$attendanceRecord->id }}"
+    <form action="{{ Auth::user()->admin_status ? '/admin/attendance/'.$attendanceRecord->id : '/attendance/detail/'.$attendanceRecord->id }} "
         method="post"
         class="detail-table"
         id="attendance-form">
@@ -67,9 +71,11 @@
         </div>
         <div class="detail-row">
             <span class="detail-label">出勤・退勤</span>
-            <input type="time" name="clock_in" value="{{ $attendanceRecord->clock_in?->format('H:i') }}">
-            ～
-            <input type="time" name="clock_out" value="{{ $attendanceRecord->clock_out?->format('H:i') }}">
+            <div class="time-value">
+                <input type="time" name="clock_in" value="{{ $attendanceRecord->clock_in?->format('H:i') }}">
+                <span>～</span>
+                <input type="time" name="clock_out" value="{{ $attendanceRecord->clock_out?->format('H:i') }}">
+            </div>
             <div class="form__error">
                 @error('clock_out')
                 {{ $message }}
@@ -79,8 +85,10 @@
         @foreach($attendanceRecord->attendanceBreaks as $break)
         <div class="detail-row">
             <span class="detail-label">休憩{{ $loop->iteration }}</span>
-            <input type="time" name="breaks[{{ $loop->index }}][break_in]" value="{{ $break->break_in?->format('H:i') }}"> ～
-            <input type="time" name="breaks[{{ $loop->index }}][break_out]" value="{{ $break->break_out?->format('H:i') }}">
+            <div class="time-value">
+                <input type="time" name="breaks[{{ $loop->index }}][break_in]" value="{{ $break->break_in?->format('H:i') }}"> <span>～</span>
+                <input type="time" name="breaks[{{ $loop->index }}][break_out]" value="{{ $break->break_out?->format('H:i') }}">
+            </div>
             <div class="form__error">
                 @error('breaks.' . $loop->index . '.break_in')
                 {{ $message }}
@@ -93,8 +101,23 @@
         @endforeach
         <div class="detail-row">
             <span class="detail-label">休憩{{ $attendanceRecord->attendanceBreaks->count() + 1 }}</span>
-            <input type="time" name="breaks[{{ $attendanceRecord->attendanceBreaks->count() }}][break_in]"> ～
-            <input type="time" name="breaks[{{ $attendanceRecord->attendanceBreaks->count() }}][break_out]">
+            <div class="time-value">
+                <input type="text"
+                    name="breaks[{{ $attendanceRecord->attendanceBreaks->count() }}][break_in]"
+                    class="time-input"
+                    value=""
+                    placeholder=""
+                    onfocus="this.type='time'"
+                    onblur="if(this.value=='') this.type='text'">
+                <span>～</span>
+                <input type="text"
+                    name="breaks[{{ $attendanceRecord->attendanceBreaks->count() }}][break_out]"
+                    class="time-input"
+                    value=""
+                    placeholder=""
+                    onfocus="this.type='time'"
+                    onblur="if(this.value=='') this.type='text'">
+            </div>
             <div class="form__error">
                 @error('breaks.' . $attendanceRecord->attendanceBreaks->count() . '.break_in')
                 {{ $message }}
@@ -107,11 +130,11 @@
         <div class="detail-row">
             <span class="detail-label">備考</span>
             <input type="text" name="comment" value="{{ $attendanceRecord->comment }}">
-            <div class="form__error">
-                @error('comment')
-                {{ $message }}
-                @enderror
-            </div>
+        </div>
+        <div class="form__error">
+            @error('comment')
+            {{ $message }}
+            @enderror
         </div>
     </form>
     <button class="btn btn--big detail-submit" form="attendance-form">修正</button>

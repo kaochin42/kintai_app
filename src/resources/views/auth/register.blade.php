@@ -12,7 +12,7 @@
 @section('content')
 
 @include('components.header')
-<form action="/register" method="post" class="authenticate center">
+<form action="/register" method="post" class="authenticate center" novalidate>
     @csrf
     <h1 class="page__title">会員登録</h1>
     <label for="name" class="entry__name">名前</label>
@@ -38,6 +38,11 @@
     </div>
     <label for="password_confirm" class="entry__name">パスワード確認</label>
     <input name="password_confirmation" id="password_confirm" type="password" class="input">
+    <div class="form__error">
+        @error('password_confirmation')
+        {{ $message }}
+        @enderror
+    </div>
     <button class="btn btn--big">登録する</button>
     <a href="/login" class="link">ログインはこちら</a>
 </form>

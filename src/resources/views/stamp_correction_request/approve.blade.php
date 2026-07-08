@@ -26,18 +26,22 @@
 
         <div class="detail-row">
             <span class="detail-label">出勤・退勤</span>
-            <span>{{ $stampCorrectionRequest->new_clock_in?->format('H:i') }}</span>
-            ～
-            <span>{{ $stampCorrectionRequest->new_clock_out?->format('H:i') }}</span>
+            <div class="time-value">
+                <span>{{ $stampCorrectionRequest->new_clock_in?->format('H:i') }}</span>
+                <span>～</span>
+                <span>{{ $stampCorrectionRequest->new_clock_out?->format('H:i') }}</span>
+            </div>
         </div>
 
         {{-- 休憩（correctionBreaksをループ） --}}
         @foreach($stampCorrectionRequest->correctionBreaks as $break)
         <div class="detail-row">
             <span class="detail-label">休憩{{ $loop->iteration }}</span>
-            <span>{{ $break->new_break_in?->format('H:i') }}</span>
-            ～
-            <span>{{ $break->new_break_out?->format('H:i') }}</span>
+            <div class="time-value">
+                <span>{{ $break->new_break_in?->format('H:i') }}</span>
+                <span>～</span>
+                <span>{{ $break->new_break_out?->format('H:i') }}</span>
+            </div>
         </div>
         @endforeach
 
@@ -53,8 +57,7 @@
     @else
     <form action="/stamp_correction_request/approve/{{ $stampCorrectionRequest->id }}" method="post">
         @csrf
-        @method('POST')
-        <button class="btn btn--big">承認</button>
+        <button class="btn btn--big  detail-submit">承認</button>
     </form>
     @endif
 </div>
