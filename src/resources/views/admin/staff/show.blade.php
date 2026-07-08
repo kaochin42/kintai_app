@@ -46,5 +46,6 @@
             @endforeach
         </tbody>
     </table>
+    <a href="/admin/attendance/staff/{{ $user->id }}/csv?month={{ $currentMonth->format('Y-m') }}" class="btn btn--big detail-submit">CSV出力</a>
 </div>
 @endsection

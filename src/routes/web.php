@@ -44,4 +44,5 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::put('/attendance/{id}', [AdminAttendanceController::class, 'update']);
     Route::get('/staff/list', [StaffController::class, 'index']);
     Route::get('/attendance/staff/{id}', [StaffController::class, 'show']);
+    Route::get('/attendance/staff/{id}/csv', [StaffController::class, 'export']);
 });

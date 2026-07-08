@@ -13,7 +13,7 @@ use App\Models\AttendanceRecord;
 class StaffController extends Controller
 {
     use CalculatesAttendance;
-    
+
     public function index()
     {
         $users = User::where('admin_status', false)->get();
@@ -60,5 +60,52 @@ class StaffController extends Controller
             'prevMonth' => $prevMonth,
             'nextMonth' => $nextMonth,
         ]);
+    }
+
+    public function export(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $month = $request->input('month', now()->format('Y-m'));
+        $currentMonth = Carbon::createFromFormat('Y-m', $month);
+
+        $attendanceRecords = AttendanceRecord::where('user_id', $id)
+            ->where('date', 'like', $month . '%')
+            ->with('attendanceBreaks')
+            ->get()
+            ->keyBy(function ($record) {
+                return $record->date->format('Y-m-d');
+            })
+            ->map(function ($record) {
+                $record->break_time = $this->formatMinutesToTime($this->calculateBreakMinutes($record));
+                $record->work_time = $this->formatMinutesToTime($this->calculateWorkMinutes($record));
+                return $record;
+            });
+
+        $daysInMonth = $currentMonth->daysInMonth;
+        $dates = [];
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $dates[] = $currentMonth->copy()->day($day)->format('Y-m-d');
+        }
+
+        $fileName = $user->name . '_' . $currentMonth->format('Y-m') . '.csv';
+
+        return response()->streamDownload(function () use ($dates, $attendanceRecords) {
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, ['日付', '出勤', '退勤', '休憩', '合計']);
+
+            foreach ($dates as $date) {
+                $row = [
+                    Carbon::parse($date)->locale('ja')->isoFormat('MM/DD(ddd)'),
+                    $attendanceRecords->get($date)?->clock_in?->format('H:i') ?? '',
+                    $attendanceRecords->get($date)?->clock_out?->format('H:i') ?? '',
+                    $attendanceRecords->get($date)?->break_time ?? '',
+                    $attendanceRecords->get($date)?->work_time ?? '',
+                ];
+                fputcsv($handle, $row);
+            }
+
+            fclose($handle);
+        }, $fileName);
     }
 }
