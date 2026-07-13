@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
 
 #[Fillable(['user_id', 'date', 'clock_in', 'clock_out', 'comment'])]
 class AttendanceRecord extends Model
 {
+    use HasFactory;
+    
     protected function casts(): array
     {
         return [

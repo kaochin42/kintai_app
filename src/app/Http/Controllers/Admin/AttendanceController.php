@@ -22,7 +22,7 @@ class AttendanceController extends Controller
         $date = $request->input('date', now()->format('Y-m-d'));
 
         // 指定日の勤怠データを取得（ユーザー情報と休憩情報も一緒に取得してN+1問題を防ぐ）
-        $attendanceRecords = AttendanceRecord::where('date', $date)
+        $attendanceRecords = AttendanceRecord::whereDate('date', $date)
             ->with(['user', 'attendanceBreaks'])
             ->get();
 
