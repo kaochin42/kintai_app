@@ -52,13 +52,19 @@ class AttendanceController extends Controller
             ->with('attendanceBreaks')
             ->firstOrFail();
 
-        $hasPendingRequest = StampCorrectionRequest::where('attendance_record_id', $attendanceRecord->id)
+        $stampCorrectionRequest = StampCorrectionRequest::where('attendance_record_id', $attendanceRecord->id)
             ->where('is_approved', false)
-            ->exists();
+            ->with('correctionBreaks')
+            ->first();
+
+        if (!is_null($stampCorrectionRequest)) {
+            return redirect("/stamp_correction_request/approve/{$stampCorrectionRequest->id}");
+        }
 
         return view('attendance.detail', [
             'attendanceRecord' => $attendanceRecord,
-            'hasPendingRequest' => $hasPendingRequest,
+            'hasPendingRequest' => !is_null($stampCorrectionRequest),
+            'stampCorrectionRequest' => $stampCorrectionRequest,
         ]);
     }
 

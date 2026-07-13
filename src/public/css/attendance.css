@@ -218,6 +218,12 @@ body {
     gap: 50px;
 }
 
+.field-group {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+
 .detail-row:last-child {
     border-bottom: none;
 }

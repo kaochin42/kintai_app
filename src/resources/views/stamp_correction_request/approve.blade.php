@@ -36,7 +36,13 @@
         {{-- 休憩（correctionBreaksをループ） --}}
         @foreach($stampCorrectionRequest->correctionBreaks as $break)
         <div class="detail-row">
-            <span class="detail-label">休憩{{ $loop->iteration }}</span>
+            <span class="detail-label">
+                @if($loop->count === 1)
+                    休憩
+                @else
+                    休憩{{ $loop->iteration }}
+                @endif
+            </span>
             <div class="time-value">
                 <span>{{ $break->new_break_in?->format('H:i') }}</span>
                 <span>～</span>

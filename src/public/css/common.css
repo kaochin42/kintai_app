@@ -129,6 +129,9 @@ header {
 }
 
 .form__error {
+    display: flex;
+    gap: 16px;
     color: #ff333f;
     margin-top: 8px;
+    flex-direction: column;
 }
