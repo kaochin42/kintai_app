@@ -24,6 +24,7 @@ class AttendanceUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'clock_in' => ['before:clock_out'],
             'clock_out' => ['after:clock_in'],
             'comment' => ['required'],
         ];
@@ -32,6 +33,7 @@ class AttendanceUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'clock_in.before' => '出勤時間もしくは退勤時間が不適切な値です',
             'clock_out.after' => '出勤時間もしくは退勤時間が不適切な値です',
             'comment.required' => '備考を記入してください',
         ];

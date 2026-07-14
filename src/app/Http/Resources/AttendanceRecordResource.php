@@ -26,8 +26,16 @@ class AttendanceRecordResource extends JsonResource
             'total_time' => $this->calculateTotalTime(),
             'total_break_time' => $this->calculateTotalBreakTime(),
             'comment' => $this->comment,
-            'breaks' => AttendanceBreakResource::collection($this->whenLoaded('attendanceBreaks')),        'applications' => StampCorrectionRequestResource::collection($this->whenLoaded('stampCorrectionRequests')),];
+            'breaks' => AttendanceBreakResource::collection($this->whenLoaded('attendanceBreaks')),
+            'applications' => StampCorrectionRequestResource::collection($this->whenLoaded('stampCorrectionRequests')),
+        ];
     }
+
+    /**
+     * 出勤〜退勤時間から休憩時間を差し引いた実働時間を計算する。
+     *
+     * @return string|null 実働時間（HH:MM形式）。出勤または退勤が未打刻の場合はnull
+     */
     private function calculateTotalTime(): ?string
     {
         if (!$this->clock_in || !$this->clock_out) return null;
@@ -37,6 +45,12 @@ class AttendanceRecordResource extends JsonResource
         $minutes = $totalMinutes % 60;
         return str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
     }
+
+    /**
+     * 休憩時間の合計を計算する。
+     *
+     * @return string 休憩時間の合計（HH:MM形式）
+     */
     private function calculateTotalBreakTime(): ?string
     {
         $minutes = $this->calculateTotalBreakMinutes();
@@ -44,6 +58,13 @@ class AttendanceRecordResource extends JsonResource
         $mins = $minutes % 60;
         return str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($mins, 2, '0', STR_PAD_LEFT);
     }
+
+    /**
+     * 紐づく休憩レコード（attendanceBreaks）の合計時間を分単位で計算する。
+     * リレーションがeager loadされていない場合は0を返す。
+     *
+     * @return int 休憩時間の合計（分）
+     */
     private function calculateTotalBreakMinutes(): int
     {
         if (!$this->relationLoaded('attendanceBreaks')) return 0;

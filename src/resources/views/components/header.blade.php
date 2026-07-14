@@ -1,6 +1,12 @@
 <header class="header">
     <div class="header__logo">
-        <a href="/"><img src="{{ asset('img/logo.png') }}" alt="ロゴ"></a>
+        @php
+        $logoUrl = '/login';
+        if (Auth::check()) {
+        $logoUrl = Auth::user()->admin_status ? '/admin/attendance/list' : '/attendance';
+        }
+        @endphp
+        <a href="{{ $logoUrl }}"><img src="{{ asset('img/logo.png') }}" alt="ロゴ"></a>
     </div>
     @auth
     @if(!in_array(Route::currentRouteName(), ['register', 'login', 'admin.login', 'verification.notice']))
