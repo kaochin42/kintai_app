@@ -10,9 +10,9 @@ use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController
 use App\Http\Controllers\Admin\StaffController;
 
 // 一般ユーザー（認証不要）
-Route::get('/register', [RegisterController::class, 'index']);
+Route::get('/register', [RegisterController::class, 'index'])->name('register');
 Route::post('/register', [RegisterController::class, 'store']);
-Route::get('/login', [LoginController::class, 'index'])->name('register');
+Route::get('/login', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'store'])->name('login');
 
 // 一般ユーザー（認証あり）
