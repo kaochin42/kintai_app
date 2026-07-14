@@ -41,11 +41,11 @@ class StampCorrectionRequestController extends Controller
     /**
      * 修正申請の詳細を表示する（一般ユーザーがアクセスした場合は勤怠詳細画面にリダイレクト）
      *
-     * @param int $id 修正申請ID
+     * @param int $attendance_correct_request_id 修正申請ID
      */
-    public function show($id)
+    public function show($attendance_correct_request_id)
     {
-        $stampCorrectionRequest = StampCorrectionRequest::where('id', $id)
+        $stampCorrectionRequest = StampCorrectionRequest::where('id', $attendance_correct_request_id)
             ->with(['user', 'attendanceRecord', 'correctionBreaks'])
             ->firstOrFail();
 
@@ -62,11 +62,11 @@ class StampCorrectionRequestController extends Controller
     /**
      * 修正申請を承認し、勤怠レコードを申請内容で更新する
      *
-     * @param int $id 修正申請ID
+     * @param int $attendance_correct_request_id 修正申請ID
      */
-    public function update($id)
+    public function update($attendance_correct_request_id)
     {
-        $stampCorrectionRequest = StampCorrectionRequest::where('id', $id)
+        $stampCorrectionRequest = StampCorrectionRequest::where('id', $attendance_correct_request_id)
             ->with('correctionBreaks')
             ->firstOrFail();
 

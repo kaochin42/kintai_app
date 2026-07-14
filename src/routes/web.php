@@ -25,8 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/attendance/detail/{id}', [AttendanceController::class, 'show']);
     Route::put('/attendance/detail/{id}', [AttendanceController::class, 'update']);
     Route::get('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'index']);
-    Route::get('/stamp_correction_request/approve/{id}', [StampCorrectionRequestController::class, 'show']);
-    Route::post('/stamp_correction_request/approve/{id}', [StampCorrectionRequestController::class, 'update']);
+    Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [StampCorrectionRequestController::class, 'show']);
+    Route::post('/stamp_correction_request/approve/{attendance_correct_request_id}', [StampCorrectionRequestController::class, 'update']);
 });
 
 
