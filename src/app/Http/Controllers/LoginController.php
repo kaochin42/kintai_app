@@ -8,11 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    /**
+     * ログイン画面を表示する
+     */
     public function index()
     {
         return view('auth.login');
     }
 
+    /**
+     * ログイン処理を行う（管理者は対象外）
+     *
+     * @param LoginRequest $request バリデーション済みのログイン情報
+     */
     public function store(LoginRequest $request)
     {
         if (!Auth::attempt([
@@ -36,6 +44,11 @@ class LoginController extends Controller
         return redirect('/attendance');
     }
 
+    /**
+     * ログアウト処理を行う
+     *
+     * @param Request $request
+     */
     public function destroy(Request $request)
     {
         Auth::logout();

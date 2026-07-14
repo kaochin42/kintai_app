@@ -21,9 +21,10 @@
         </div>
         <div class="detail-row">
             <span class="detail-label">日付</span>
-            <span class="detail-value">
-                {{ $attendanceRecord->date->format('Y年') }}　{{ $attendanceRecord->date->format('n月j日') }}
-            </span>
+            <div class="date-value">
+                <span>{{ $attendanceRecord->date->format('Y年') }}</span>
+                <span>{{ $attendanceRecord->date->format('n月j日') }}</span>
+            </div>
         </div>
         <div class="detail-row">
             <span class="detail-label">出勤・退勤</span>
@@ -71,9 +72,10 @@
         </div>
         <div class="detail-row">
             <span class="detail-label">日付</span>
-            <span class="detail-value">
-                {{ $attendanceRecord->date->format('Y年') }}　{{ $attendanceRecord->date->format('n月j日') }}
-            </span>
+            <div class="date-value">
+                <span>{{ $attendanceRecord->date->format('Y年') }}</span>
+                <span>{{ $attendanceRecord->date->format('n月j日') }}</span>
+            </div>
         </div>
         <div class="detail-row">
             <span class="detail-label">出勤・退勤</span>
@@ -148,7 +150,7 @@
         <div class="detail-row">
             <span class="detail-label">備考</span>
             <div class="field-group">
-                <input type="text" name="comment" value="{{ old('comment', $attendanceRecord->comment) }}">
+                <textarea name="comment">{{ old('comment', $attendanceRecord->comment) }}</textarea>
                 <div class="form__error">
                     @error('comment')
                     {{ $message }}

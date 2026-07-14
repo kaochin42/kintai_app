@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['name', 'email', 'password', 'admin_status'])]
 #[Hidden(['password', 'remember_token'])]
@@ -31,12 +32,12 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function attendanceRecords()
+    public function attendanceRecords(): HasMany
     {
         return $this->hasMany(AttendanceRecord::class);
     }
 
-    public function stampCorrectionRequests()
+    public function stampCorrectionRequests(): HasMany
     {
         return $this->hasMany(StampCorrectionRequest::class);
     }

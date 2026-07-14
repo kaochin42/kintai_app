@@ -8,12 +8,16 @@ use App\Models\User;
 use App\Traits\CalculatesAttendance;
 use Carbon\Carbon;
 use App\Models\AttendanceRecord;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 
 class StaffController extends Controller
 {
     use CalculatesAttendance;
 
+    /**
+     * 一般ユーザーのスタッフ一覧を表示する
+     */
     public function index()
     {
         $users = User::where('admin_status', false)->get();
@@ -23,6 +27,12 @@ class StaffController extends Controller
         ]);
     }
 
+    /**
+     * 指定スタッフの月次勤怠一覧を表示する
+     *
+     * @param Request $request リクエストパラメータ（month: Y-m形式）
+     * @param int $id 対象ユーザーID
+     */
     public function show(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -62,7 +72,13 @@ class StaffController extends Controller
         ]);
     }
 
-    public function export(Request $request, $id)
+    /**
+     * 指定スタッフの月次勤怠一覧をCSVでダウンロードする
+     *
+     * @param Request $request リクエストパラメータ（month: Y-m形式）
+     * @param int $id 対象ユーザーID
+     */
+    public function export(Request $request, $id): StreamedResponse
     {
         $user = User::findOrFail($id);
         $month = $request->input('month', now()->format('Y-m'));

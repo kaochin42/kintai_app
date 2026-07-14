@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable(['user_id', 'date', 'clock_in', 'clock_out', 'comment'])]
 class AttendanceRecord extends Model
@@ -21,17 +23,17 @@ class AttendanceRecord extends Model
         ];
     }
 
-    public function stampCorrectionRequests()
+    public function stampCorrectionRequests(): HasMany
     {
         return $this->hasMany(StampCorrectionRequest::class);
     }
 
-    public function attendanceBreaks()
+    public function attendanceBreaks(): HasMany
     {
         return $this->hasMany(AttendanceBreak::class);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

@@ -32,37 +32,37 @@
         </thead>
         <tbody>
             @if(request('tab') === 'approved')
-            @foreach($approvedRequests as $request)
+            @foreach($approvedRequests as $correctionRequest)
             <tr>
                 <td>承認済み</td>
                 <td>
                     @if(Auth::user()->admin_status)
-                    {{ $request->user->name }}
+                    {{ $correctionRequest->user->name }}
                     @else
                     {{ Auth::user()->name }}
                     @endif
                 </td>
-                <td>{{ $request->attendanceRecord->date->format('Y/m/d') }}</td>
-                <td>{{ $request->new_comment }}</td>
-                <td>{{ $request->created_at->format('Y/m/d') }}</td>
-                <td><a href="/stamp_correction_request/approve/{{ $request->id }}">詳細</a></td>
+                <td>{{ $correctionRequest->attendanceRecord->date->format('Y/m/d') }}</td>
+                <td>{{ $correctionRequest->new_comment }}</td>
+                <td>{{ $correctionRequest->created_at->format('Y/m/d') }}</td>
+                <td><a href="/stamp_correction_request/approve/{{ $correctionRequest->id }}">詳細</a></td>
             </tr>
             @endforeach
             @else
-            @foreach($pendingRequests as $request)
+            @foreach($pendingRequests as $correctionRequest)
             <tr>
                 <td>承認待ち</td>
                 <td>
                     @if(Auth::user()->admin_status)
-                    {{ $request->user->name }}
+                    {{ $correctionRequest->user->name }}
                     @else
                     {{ Auth::user()->name }}
                     @endif
                 </td>
-                <td>{{ $request->attendanceRecord->date->format('Y/m/d') }}</td>
-                <td>{{ $request->new_comment }}</td>
-                <td>{{ $request->created_at->format('Y/m/d') }}</td>
-                <td><a href="/stamp_correction_request/approve/{{ $request->id }}">詳細</a></td>
+                <td>{{ $correctionRequest->attendanceRecord->date->format('Y/m/d') }}</td>
+                <td>{{ $correctionRequest->new_comment }}</td>
+                <td>{{ $correctionRequest->created_at->format('Y/m/d') }}</td>
+                <td><a href="/stamp_correction_request/approve/{{ $correctionRequest->id }}">詳細</a></td>
             </tr>
             @endforeach
             @endif

@@ -4,6 +4,16 @@
 
 body {
     width: 100vw;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+}
+
+input,
+textarea,
+button,
+select {
+    font-family: inherit;
+    font-weight: inherit;
 }
 
 img {

@@ -9,11 +9,19 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    /**
+     * 管理者ログイン画面を表示する
+     */
     public function index()
     {
         return view('admin.auth.login');
     }
 
+    /**
+     * 管理者ログイン処理を行う
+     *
+     * @param AdminLoginRequest $request バリデーション済みのログイン情報
+     */
     public function store(AdminLoginRequest $request)
     {
         if (!Auth::attempt([
@@ -31,6 +39,11 @@ class LoginController extends Controller
         return redirect('/admin/attendance/list');
     }
 
+    /**
+     * 管理者ログアウト処理を行う
+     *
+     * @param Request $request
+     */
     public function destroy(Request $request)
     {
         Auth::logout();

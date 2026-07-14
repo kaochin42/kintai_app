@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 
 class StampCorrectionRequestController extends Controller
 {
+    /**
+     * 修正申請一覧を表示する（一般ユーザーは自分の申請のみ、管理者は全ユーザーの申請）
+     */
     public function index()
     {
         if (Auth::user()->admin_status) {
@@ -35,6 +38,11 @@ class StampCorrectionRequestController extends Controller
         ]);
     }
 
+    /**
+     * 修正申請の詳細を表示する（一般ユーザーがアクセスした場合は勤怠詳細画面にリダイレクト）
+     *
+     * @param int $id 修正申請ID
+     */
     public function show($id)
     {
         $stampCorrectionRequest = StampCorrectionRequest::where('id', $id)
@@ -51,6 +59,11 @@ class StampCorrectionRequestController extends Controller
         ]);
     }
 
+    /**
+     * 修正申請を承認し、勤怠レコードを申請内容で更新する
+     *
+     * @param int $id 修正申請ID
+     */
     public function update($id)
     {
         $stampCorrectionRequest = StampCorrectionRequest::where('id', $id)

@@ -15,6 +15,8 @@ class AttendanceController extends Controller
     use CalculatesAttendance;
     /**
      * 管理者向け：指定した日付の全ユーザーの勤怠一覧を表示する
+     *
+     * @param Request $request リクエストパラメータ（date: Y-m-d形式）
      */
     public function index(Request $request)
     {
@@ -46,6 +48,12 @@ class AttendanceController extends Controller
         ]);
     }
 
+    /**
+     * 勤怠詳細を表示する（管理者）
+     * 承認待ちの修正申請が存在する場合は承認画面へリダイレクトする
+     *
+     * @param int $id 勤怠レコードID
+     */
     public function show($id)
     {
         $attendanceRecord = AttendanceRecord::where('id', $id)
@@ -68,6 +76,12 @@ class AttendanceController extends Controller
         ]);
     }
 
+    /**
+     * 勤怠情報を管理者が直接修正する
+     *
+     * @param AttendanceUpdateRequest $request バリデーション済みの修正内容
+     * @param int $id 勤怠レコードID
+     */
     public function update(AttendanceUpdateRequest $request, $id)
     {
         $attendanceRecord = AttendanceRecord::where('id', $id)
@@ -81,16 +95,16 @@ class AttendanceController extends Controller
 
         $attendanceRecord->attendanceBreaks()->delete();
 
-        foreach ($request->breaks as $break) {
-            if (!$break['break_in'] && !$break['break_out']) {
-                continue;
-            }
-
-            $attendanceRecord->attendanceBreaks()->create([
-                'break_in' => $break['break_in'],
-                'break_out' => $break['break_out'],
-            ]);
-        }
+        collect($request->breaks)
+            ->filter(function ($break) {
+                return $break['break_in'] || $break['break_out'];
+            })
+            ->each(function ($break) use ($attendanceRecord) {
+                $attendanceRecord->attendanceBreaks()->create([
+                    'break_in' => $break['break_in'],
+                    'break_out' => $break['break_out'],
+                ]);
+            });
 
         return redirect("/admin/attendance/{$id}");
     }

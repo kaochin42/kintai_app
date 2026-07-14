@@ -10,11 +10,16 @@ use Carbon\Carbon;
 use App\Models\StampCorrectionRequest;
 use App\Models\CorrectionBreak;
 use App\Http\Requests\AttendanceUpdateRequest;
+use Illuminate\View\View;
 
 class AttendanceController extends Controller
 {
     use CalculatesAttendance;
 
+    /**
+     * 勤怠打刻画面を表示する
+     * 当日の勤怠レコードとステータス（勤務外/出勤中/休憩中/退勤済）を取得して表示する
+     */
     public function index()
     {
         $today = today();
@@ -32,11 +37,24 @@ class AttendanceController extends Controller
         ]);
     }
 
+    /**
+     * 打刻処理を行う（出勤・休憩入・休憩戻・退勤）
+     *
+     * @param Request $request リクエストパラメータ（action: clock_in/break_in/break_out/clock_out）
+     */
     public function store(Request $request)
     {
         $action = $request->input('action');
 
         if ($action === 'clock_in') {
+            $existingRecord = AttendanceRecord::where('user_id', Auth::id())
+                ->where('date', today())
+                ->first();
+
+            if ($existingRecord) {
+                return redirect('/attendance');
+            }
+
             AttendanceRecord::create([
                 'user_id' => Auth::id(),
                 'date' => today(),
@@ -69,6 +87,12 @@ class AttendanceController extends Controller
         return redirect('/attendance');
     }
 
+    /**
+     * 勤怠レコードの状態から現在のステータス文字列を判定する
+     *
+     * @param AttendanceRecord|null $attendanceRecord 当日の勤怠レコード
+     * @return string 勤務外・出勤中・休憩中・退勤済のいずれか
+     */
     private function getStatus($attendanceRecord)
     {
         if (!$attendanceRecord) {
@@ -88,6 +112,11 @@ class AttendanceController extends Controller
         return '出勤中';
     }
 
+    /**
+     * 指定月の勤怠一覧を表示する（一般ユーザー）
+     *
+     * @param Request $request リクエストパラメータ（month: Y-m形式）
+     */
     public function list(Request $request)
     {
         $month = $request->input('month', now()->format('Y-m'));
@@ -124,6 +153,11 @@ class AttendanceController extends Controller
         ]);
     }
 
+    /**
+     * 勤怠詳細画面を表示する（一般ユーザー）
+     *
+     * @param int $id 勤怠レコードID
+     */
     public function show($id)
     {
         $attendanceRecord = AttendanceRecord::where('id', $id)
@@ -143,6 +177,12 @@ class AttendanceController extends Controller
         ]);
     }
 
+    /**
+     * 勤怠の修正申請を作成する
+     *
+     * @param AttendanceUpdateRequest $request バリデーション済みの修正内容
+     * @param int $id 勤怠レコードID
+     */
     public function update(AttendanceUpdateRequest $request, $id)
     {
         $attendanceRecord = AttendanceRecord::where('id', $id)
@@ -157,22 +197,26 @@ class AttendanceController extends Controller
             'new_comment' => $request->comment,
         ]);
 
-        foreach ($request->breaks as $break) {
-            if (!$break['break_in'] && !$break['break_out']) {
-                continue;
-            }
-
-            CorrectionBreak::create([
-                'stamp_correction_request_id' => $stampCorrectionRequest->id,
-                'new_break_in' => $break['break_in'],
-                'new_break_out' => $break['break_out'],
-            ]);
-        }
+        collect($request->breaks)
+            ->filter(function ($break) {
+                return $break['break_in'] || $break['break_out'];
+            })
+            ->each(function ($break) use ($stampCorrectionRequest) {
+                CorrectionBreak::create([
+                    'stamp_correction_request_id' => $stampCorrectionRequest->id,
+                    'new_break_in' => $break['break_in'],
+                    'new_break_out' => $break['break_out'],
+                ]);
+            });
 
         return redirect('/stamp_correction_request/list');
     }
 
-    public function report()
+    /**
+     * マイ勤怠レポートを表示する
+     * 過去6ヶ月分の総労働時間・総残業時間・平均労働時間、月次推移、当月の異常検知（遅刻・早退・長時間労働）を集計する
+     */
+    public function report(): View
     {
         // 過去6ヶ月（当月含む）の期間を設定
         $startMonth = now()->subMonths(5)->startOfMonth();
