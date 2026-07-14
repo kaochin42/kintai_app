@@ -11,6 +11,7 @@
 
 <div class="report center">
     <h1 class="page__title-bar">マイ勤怠レポート</h1>
+    <p class="lead-text">過去6ヶ月の勤怠データから集計しています。</p>
 
     {{-- 基本サマリー --}}
     <div class="report-section">

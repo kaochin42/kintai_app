@@ -2,7 +2,7 @@ FROM php:8.4-fpm
 COPY php.ini /usr/local/etc/php/
 
 RUN apt update \
-    && apt install -y default-mysql-client zlib1g-dev libzip-dev unzip \
+    && apt install -y default-mysql-client zlib1g-dev libzip-dev unzip graphviz \
     && docker-php-ext-install pdo_mysql zip
 
 RUN curl -sSL https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 -o mhsendmail \
