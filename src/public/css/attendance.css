@@ -53,7 +53,7 @@ body {
 /* 出勤中のボタンを横並びに */
 .attendance form {
     display: flex;
-    gap: 20px;
+    gap: 70px;
 }
 
 /* 休憩ボタン（白） */
@@ -317,6 +317,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 /* レポート画面 */
 .report {
+    width: 900px;
+    margin: 0 auto;
     padding: 50px 0;
 }
 

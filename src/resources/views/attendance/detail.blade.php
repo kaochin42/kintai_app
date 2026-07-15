@@ -159,6 +159,7 @@
             </div>
         </div>
     </form>
+    
     <button class="btn btn--big detail-submit" form="attendance-form">修正</button>
     @endif
 </div>
