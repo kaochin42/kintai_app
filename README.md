@@ -36,7 +36,7 @@ make init
 
 ### リポジトリのクローン
 ```
-git clone git@github.com:XXXXXXXX/kintai_app.git
+git clone git@github.com:kaochin42/kintai_app.git
 cd kintai_app
 ```
 
