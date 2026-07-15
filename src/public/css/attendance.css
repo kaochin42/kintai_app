@@ -10,21 +10,24 @@
 
 .status-badge {
     display: inline-block;
-    background-color: #ccc;
+    background-color: #C8C8C8;
     border-radius: 20px;
     padding: 4px 16px;
-    font-size: 14px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #696969;
     margin-bottom: 20px;
 }
 
 .date {
-    font-size: 20px;
+    font-size: 40px;
+    font-weight: 400;
     margin-bottom: 16px;
 }
 
 .time {
-    font-size: 60px;
-    font-weight: bold;
+    font-size: 80px;
+    font-weight: 700;
     margin-bottom: 40px;
 }
 
@@ -40,8 +43,11 @@ body {
 
 /* ボタンの幅を調整 */
 .attendance .btn--big {
-    width: 200px;
+    width: 221px;
+    height: 77px;
     margin-top: 20px;
+    border-radius: 20px;
+    font-size: 32px;
 }
 
 /* 出勤中のボタンを横並びに */
@@ -60,9 +66,9 @@ body {
     border-radius: 20px;
     color: #000;
     font-weight: bold;
-    width: 200px;
-    height: 45px;
-    font-size: 20px;
+    width: 221px;
+    height: 77px;
+    font-size: 32px;
     margin-top: 20px;
 }
 
@@ -296,15 +302,6 @@ body {
     margin-bottom: 0;
 }
 
-/* 修正ボタンを右寄せ・幅を調整 */
-.detail-table~.btn--big,
-form.detail-table .btn--big {
-    width: 160px;
-    margin-top: 20px;
-    margin-left: auto;
-    font-size: 16px;
-}
-
 /* 時計アイコンを非表示 */
 input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
@@ -312,7 +309,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 /* ボタン単体で右寄せ */
 .detail-submit {
-    width: 160px;
+    width: 120px;
     margin-top: 20px;
     margin-left: auto;
     font-size: 16px;

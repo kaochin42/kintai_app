@@ -82,7 +82,7 @@ docker-compose exec php php artisan test
 | `make logs` | 各コンテナのログを表示 |
 
 ## 開発環境
-- 勤怠登録画面（一般ユーザー）：http://localhost/
+- 勤怠登録画面（一般ユーザー）：http://localhost/attendance
 - 会員登録画面：http://localhost/register
 - ログイン画面（一般ユーザー）：http://localhost/login
 - ログイン画面（管理者）：http://localhost/admin/login
