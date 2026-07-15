@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\AttendanceRecord;
@@ -78,12 +77,13 @@ class AttendanceSeeder extends Seeder
         ];
 
         $currentMonthStart = Carbon::now()->startOfMonth();
+        $today = Carbon::today();
         $d = $currentMonthStart->copy();
 
         foreach ($patterns as $pattern) {
             $count = 0;
             while ($count < $pattern['count']) {
-                if (!$d->isWeekend()) {
+                if (!$d->isWeekend() && !$d->isSameDay($today)) {
                     $record = AttendanceRecord::create([
                         'user_id' => $user1->id,
                         'date' => $d->format('Y-m-d'),
@@ -97,10 +97,8 @@ class AttendanceSeeder extends Seeder
                         'break_out' => '13:00:00',
                     ]);
                     $count++;
-                    $d->addDay();
-                } else {
-                    $d->addDay();
                 }
+                $d->addDay();
             }
         }
     }

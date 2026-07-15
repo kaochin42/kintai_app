@@ -94,11 +94,13 @@ docker-compose exec php php artisan test
 
 | 名前 | メールアドレス | パスワード | 権限 | 備考 |
 | --- | --- | --- | --- | --- |
-| ユーザー1 | user1@example.com | password | 一般ユーザー | マイ勤怠レポート確認用の意図的な勤怠データを保持 |
-| ユーザー2 | user2@example.com | password | 一般ユーザー | 通常勤務パターンの勤怠データを保持 |
-| ユーザー3 | user3@example.com | password | 管理者ユーザー | `admin_status = true` |
+| ユーザー1（一般） | user1@example.com | password | 一般ユーザー | マイ勤怠レポート確認用の意図的な勤怠データを保持。打刻機能の動作確認はこのアカウントで行ってください |
+| ユーザー2（一般） | user2@example.com | password | 一般ユーザー | 通常勤務パターンの勤怠データを保持 |
+| ユーザー3（管理者） | user3@example.com | password | 管理者ユーザー | `admin_status = true` |
 
 いずれのアカウントもメール認証済みの状態で作成されます。
+
+※ ユーザー1の当月データは、シーディングを実行した日を除いて生成されます（打刻機能の動作確認をシーディング当日でも行えるようにするための対応です）。
 
 ## 公開API
 外部アプリケーションが勤怠データを取得・操作できるAPIを `routes/api.php` の `v1` プレフィックス配下に用意しています。
